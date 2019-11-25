@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+void get_token(char *bp);
+int j=1;
+int sum=0;
+struct OPTAB{
+        char name[8];
+        int len;
+}Wordtab[]={{"LDA",3},{"STA",4},{"TIX",2},{"COMP",3},{"ADD",3}};
+
+int main(){
+        FILE *fp;
+        char buf[80];
+        if((fp=fopen("word.s","r"))==NULL){
+                fprintf(stderr,"file not found...\n"); exit(1);
+        }
+        while(fgets(buf,sizeof(buf),fp)!=NULL){
+                get_token(buf);
+        }
+}
+
+void get_token(char *bp){
+        char *cp;
+        int i;
+        struct OPTAB tab;
+        for(cp=strtok(bp," \n\t"); cp!=NULL; ){
+                i=0;
+                while(1){
+                        if(sizeof(Wordtab)/(sizeof(tab.len)+sizeof(tab.name))==i){
+                                printf(" Undefined word\n");
+                                break;
+                        }
+                        if(strcmp(cp,Wordtab[i].name)==0){
+                          printf("%2d,%.2x, %5s,%3.2d\n",j,sum,Wordtab[i].name,Wordtab[i].len);
+                                sum+=Wordtab[i].len;
+                                j++;
+                                break;
+                        }
+                        i++;
+                }
+                cp=strtok(NULL," \t\n");
+        }
+}
