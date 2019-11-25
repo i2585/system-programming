@@ -1,0 +1,50 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int Number(char *p);
+int Alphabet(char *p);
+int i;
+void main(){
+        FILE *f;
+        char text[100];
+        int count = 0, count1 = 0, count2 = 0;
+
+        if((f = fopen("sample.s","r"))==NULL){
+                fprintf(stderr,"No file \n");
+                exit(1);
+        }
+        char *p;
+        while(fgets(text,sizeof(text),f)!=NULL){
+                for(p=strtok(text," \t\n"); p!=NULL; ){
+                        if(Number(p)){
+                                count++;
+                        }
+                        else if(Alphabet(p)){
+                                count1++;
+                        }
+                        else{
+                                count2++;
+                        }
+                        p = strtok(NULL," \t\n");
+                }
+        }
+        fclose(f);
+        printf("Number Word = %d\n", count);
+        printf("Alphabet Word = %d\n", count1);
+        printf("Remainder Word = %d\n", count2);
+}
+int Number(char *p){
+        for(i=0;i<strlen(p);i++){
+                if(!(p[i]>='0'&&p[i]<='9'))
+                        return 0;
+        }
+        return 1;
+}
+int Alphabet(char *p){
+        for(i=0;i<strlen(p);i++){
+                if(!(p[i]>='A'&&p[i]<='Z'))
+                        return 0;
+        }
+        return 1;
+}
