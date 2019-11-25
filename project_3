@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+void get_token(char *bp,char s[][10],char c[][10],char o[][10]);
+int i=0;
+int main() {
+        FILE *fp;
+        char buf[80];
+        char s[100][10];
+        char c[100][10];
+        char o[100][10];
+        int k,j;
+        if ((fp = fopen("sample.s", "r")) == NULL) {
+                fprintf(stderr, "file not found...\n"); exit(1);
+        }
+        while(fgets(buf, sizeof(buf), fp) != NULL) {
+                get_token(buf,s,c,o);
+        }
+        fclose(fp);
+        for(k=0;k<50;k=k+10){
+                printf("Symbol : ");
+                for(j=0;j<10;j++){
+                        if(j+k==45)
+                                break;
+                        printf("%10s ",s[j+k]);
+             }
+             printf("\n");
+
+                printf("Command: ");
+                for(j=0;j<10;j++){
+                        if(j+k==45)
+                                break;
+                        printf("%10s ",c[j+k]);
+                }
+                printf("\n");
+
+                printf("Operand: ");
+                for(j=0;j<10;j++){
+                        if(j+k==45)
+                                break;
+                        printf("%10s ",o[j+k]);
+                }
+                printf("\n\n");
+        }
+}
+
+void get_token(char *bp,char s[][10],char c[][10],char o[][10])
+{
+        char *cp;
+        char temp[10][10];
+        int count=0;
+        for(cp = strtok(bp, " \t\n"); cp != NULL; ){
+                strcpy(temp[count], cp);
+                cp = strtok(NULL, " \t\n");
+                count++;
+        }
+        if(count==4){
+                strcpy(s[i], temp[1]);
+                strcpy(c[i], temp[2]);
+                strcpy(o[i], temp[3]);
+        }
+        else if(count==3){
+                strcpy(s[i], " ");
+                strcpy(c[i], temp[1]);
+                strcpy(o[i], temp[2]);
+        }
+        else if(count==2){
+                strcpy(s[i], " ");
+                strcpy(c[i], temp[1]);
+                strcpy(o[i], " ");
+        }
+        i++;
+}
